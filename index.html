@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweetie Bakery | Tiệm Bánh Ngọt Ngào</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CẤU HÌNH MÀU SẮC (THEME) --- */
+        :root {
+            /* Light Mode (Mặc định): Tông Kem & Hồng Dâu */
+            --primary-color: #e11d48;       /* Màu đỏ dâu tây */
+            --accent-color: #fbbf24;        /* Màu vàng bơ */
+            --text-main: #4a0404;           /* Màu nâu sô-cô-la đậm */
+            --text-secondary: #7f1d1d;      /* Màu nâu đỏ nhạt hơn */
+            --bg-body: #fff1f2;             /* Nền hồng phấn cực nhạt */
+            --bg-card: #ffffff;             /* Nền thẻ trắng */
+            --shadow: 0 10px 20px rgba(225, 29, 72, 0.1);
+            --border-card: #fecdd3;         /* Viền hồng nhạt */
+            --font-heading: 'Pacifico', cursive; /* Font chữ viết tay */
+            --font-body: 'Nunito', sans-serif;   /* Font chữ tròn trịa */
+            --transition: all 0.3s ease;
+        }
+
+        /* Dark Mode: Tông Sô-cô-la Đen (Dark Chocolate Theme) */
+        [data-theme="dark"] {
+            --primary-color: #fda4af;       /* Đổi sang hồng phấn sáng để nổi trên nền tối */
+            --accent-color: #fbbf24;
+            --text-main: #fff1f2;           /* Chữ màu kem */
+            --text-secondary: #fecdd3;
+            --bg-body: #2c0b0e;             /* Nền nâu đen (Sô-cô-la đắng) */
+            --bg-card: #451a1e;             /* Nền thẻ nâu sáng hơn */
+            --shadow: none;
+            --border-card: #5c2b2f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--border-card);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-group { display: flex; align-items: center; gap: 30px; }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-weight: 700; font-size: 1.1rem; }
+        .nav-links a:hover { color: var(--primary-color); transition: var(--transition); }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.4rem;
+            color: var(--text-main);
+            background: none;
+            border: none;
+            transition: transform 0.5s;
+        }
+        .theme-toggle:hover { transform: rotate(180deg); color: var(--accent-color); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 85vh;
+            padding: 50px 0;
+            /* Gradient ngọt ngào */
+            background: radial-gradient(circle at top right, rgba(253, 164, 175, 0.2), transparent);
+        }
+
+        .hero-text { flex: 1; padding-right: 50px; }
+        
+        .hero-text h1 {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            line-height: 1.2;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .hero-img { flex: 1; display: flex; justify-content: center; }
+        .hero-img img {
+            border-radius: 50%;
+            border: 5px solid var(--bg-card);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: float 6s ease-in-out infinite; /* Hiệu ứng bánh bay lơ lửng */
+        }
+
+        /* Nút bấm (Button) */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border-radius: 50px; /* Bo tròn hoàn toàn */
+            font-weight: 700;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(225, 29, 72, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            background-color: #be123c;
+        }
+
+        /* --- MENU SECTION (GRID) --- */
+        .menu { padding: 80px 0; }
+        .section-title {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .section-desc { text-align: center; margin-bottom: 60px; color: var(--text-secondary); }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-card);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover .product-img img { transform: scale(1.1); }
+
+        .product-info { padding: 25px; text-align: center; }
+        
+        .product-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .btn-sm {
+            padding: 10px 25px;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 30px;
+            font-weight: 700;
+            transition: var(--transition);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .btn-sm:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--bg-card);
+            border-top: 5px solid var(--primary-color);
+            padding: 40px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        /* Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { flex-direction: column-reverse; text-align: center; padding-top: 20px; }
+            .hero-text { padding-right: 0; margin-top: 40px; }
+            .hero-text h1 { font-size: 2.5rem; }
+            .hero-img img { width: 80%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-cake-candles"></i> Sweetie.
+                </a>
+                <div class="nav-group">
+                    <ul class="nav-links">
+                        <li><a href="#">Trang chủ</a></li>
+                        <li><a href="#">Thực đơn</a></li>
+                        <li><a href="#">Về chúng tôi</a></li>
+                    </ul>
+                    <button class="theme-toggle" id="theme-btn">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container" style="display: flex; flex-wrap: wrap; align-items: center;">
+            <div class="hero-text">
+                <h1>Vị Ngọt Ngào <br> Cho Ngày Hạnh Phúc</h1>
+                <p>Thưởng thức những chiếc bánh kem thủ công thượng hạng, được làm từ nguyên liệu tươi ngon nhất và tình yêu đong đầy.</p>
+                <a href="#menu" class="btn">Đặt Bánh Ngay <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="hero-img">
+                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Delicious Chocolate Cake">
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="menu">
+        <div class="container">
+            <h2 class="section-title">Bánh Mới Ra Lò</h2>
+            <p class="section-desc">Mỗi chiếc bánh là một tác phẩm nghệ thuật</p>
+            
+            <div class="menu-grid">
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1612203985729-70726954388c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Strawberry Cake">
+                    </div>
+                    <div class="product-info">
+                        <h3>Dâu Tây Kem Tươi</h3>
+                        <span class="price">350.000đ</span>
+                        <button class="btn-sm">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1550617931-e17a7b70dce2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cupcake">
+                    </div>
+                    <div class="product-info">
+                        <h3>Cupcake Cầu Vồng</h3>
+                        <span class="price">45.000đ</span>
+                        <button class="btn-sm">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1534432182912-63863115e106?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Donut">
+                    </div>
+                    <div class="product-info">
+                        <h3>Donut Sô-cô-la</h3>
+                        <span class="price">25.000đ</span>
+                        <button class="btn-sm">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <h3>Sweetie Bakery</h3>
+            <p>123 Đường Hạnh Phúc, Quận 1, TP.HCM</p>
+            <p>&copy; 2024 Sweetie Bakery. Made with love.</p>
+        </div>
+    </footer>
+
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const icon = themeBtn.querySelector('i');
+        const htmlTag = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            htmlTag.setAttribute('data-theme', currentTheme);
+            updateIcon(currentTheme);
+        }
+
+        themeBtn.addEventListener('click', () => {
+            let currentDataTheme = htmlTag.getAttribute('data-theme');
+            let newTheme = currentDataTheme === 'light' ? 'dark' : 'light';
+            htmlTag.setAttribute('data-theme', newTheme);
+            updateIcon(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+    </script>
+</body>
+</html>

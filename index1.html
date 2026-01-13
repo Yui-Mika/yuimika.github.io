@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Xỉu UI - Demo</title>
+    <style>
+        /* --- 1. SETUP BIẾN MÀU SẮC (LIGHT/DARK MODE) --- */
+        :root {
+            /* Light Mode mặc định */
+            --bg-body: #f0f2f5;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --text-color: #333;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --tai-color: #e74c3c; /* Đỏ */
+            --xiu-color: #3498db; /* Xanh */
+            --accent: #f1c40f;    /* Vàng */
+            --dice-bg: #fff;
+            --dice-dot: #333;
+            --toggle-bg: #ccc;
+        }
+
+        /* Dark Mode Override */
+        [data-theme="dark"] {
+            --bg-body: #1a1a2e;
+            --bg-card: rgba(22, 33, 62, 0.95);
+            --text-color: #ecf0f1;
+            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+            --dice-bg: #e0e0e0;
+            --toggle-bg: #16213e;
+        }
+
+        /* --- 2. GLOBAL STYLES --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        
+        body {
+            background-color: var(--bg-body);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- 3. MAIN CONTAINER (GLASSMORPHISM) --- */
+        .game-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- 4. HEADER & TOGGLE --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 { color: var(--text-color); font-weight: 800; letter-spacing: 1px; }
+
+        /* Toggle Switch CSS */
+        .theme-switch-wrapper { display: flex; align-items: center; }
+        .theme-switch { display: inline-block; height: 34px; position: relative; width: 60px; }
+        .theme-switch input { display: none; }
+        .slider { background-color: var(--toggle-bg); bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { background-color: #fff; bottom: 4px; content: ""; height: 26px; left: 4px; position: absolute; transition: .4s; width: 26px; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* --- 5. DICE AREA (XÚC XẮC) --- */
+        .dice-plate {
+            background: rgba(0,0,0,0.05);
+            border-radius: 50%;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            border: 5px solid var(--accent);
+        }
+
+        .dice {
+            width: 50px;
+            height: 50px;
+            background: var(--dice-bg);
+            border-radius: 10px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            display: grid;
+            grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+            padding: 4px;
+        }
+
+        .dot {
+            background-color: var(--dice-dot);
+            border-radius: 50%;
+            width: 8px;
+            height: 8px;
+            place-self: center;
+            opacity: 0; /* Mặc định ẩn */
+        }
+        
+        /* Cấu hình hiển thị chấm cho từng mặt xúc xắc */
+        .d-1 .dot:nth-child(5) { opacity: 1; transform: scale(1.5); color: red; background: red;} /* Mặt 1 chấm đỏ */
+        .d-2 .dot:nth-child(1), .d-2 .dot:nth-child(9) { opacity: 1; }
+        .d-3 .dot:nth-child(1), .d-3 .dot:nth-child(5), .d-3 .dot:nth-child(9) { opacity: 1; }
+        .d-4 .dot:nth-child(1), .d-4 .dot:nth-child(3), .d-4 .dot:nth-child(7), .d-4 .dot:nth-child(9) { opacity: 1; }
+        .d-5 .dot:nth-child(1), .d-5 .dot:nth-child(3), .d-5 .dot:nth-child(5), .d-5 .dot:nth-child(7), .d-5 .dot:nth-child(9) { opacity: 1; }
+        .d-6 .dot:nth-child(1), .d-6 .dot:nth-child(3), .d-6 .dot:nth-child(4), .d-6 .dot:nth-child(6), .d-6 .dot:nth-child(7), .d-6 .dot:nth-child(9) { opacity: 1; }
+
+        /* Animation lắc */
+        .shaking { animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        /* --- 6. CONTROLS --- */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-bet {
+            flex: 1;
+            padding: 1.5rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-tai { background: linear-gradient(135deg, #ff6b6b, var(--tai-color)); }
+        .btn-xiu { background: linear-gradient(135deg, #48dbfb, var(--xiu-color)); }
+
+        .btn-bet:active { transform: scale(0.95); }
+        .btn-bet::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.2); opacity: 0; transition: opacity 0.3s;
+        }
+        .btn-bet:hover::after { opacity: 1; }
+
+        .result-display {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-top: 1rem;
+            min-height: 2rem;
+            font-weight: bold;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-left: 10px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <header>
+            <h1>TÀI XỈU 🎲</h1>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider"></div>
+                </label>
+            </div>
+        </header>
+
+        <div class="dice-plate" id="dicePlate">
+            <div class="dice d-1" id="dice1">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <div class="dice d-2" id="dice2">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <div class="dice d-3" id="dice3">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </div>
+
+        <div class="result-display" id="resultText">Vui lòng đặt cược</div>
+
+        <div class="controls">
+            <button class="btn-bet btn-tai" onclick="playGame('TAI')">
+                TÀI <br><span style="font-size: 0.8rem; opacity: 0.8">(11-17)</span>
+            </button>
+            <button class="btn-bet btn-xiu" onclick="playGame('XIU')">
+                XỈU <br><span style="font-size: 0.8rem; opacity: 0.8">(4-10)</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 1. Xử lý Dark Mode
+        const toggleSwitch = document.querySelector('#checkbox');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                toggleSwitch.checked = true;
+            }
+        }
+
+        toggleSwitch.addEventListener('change', function(e) {
+            if (e.target.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // 2. Logic Game Demo (Chỉ để hiển thị UI)
+        function playGame(choice) {
+            const dicePlate = document.getElementById('dicePlate');
+            const resultText = document.getElementById('resultText');
+            
+            // Thêm hiệu ứng lắc
+            dicePlate.classList.add('shaking');
+            resultText.innerText = "Đang lắc...";
+            
+            setTimeout(() => {
+                dicePlate.classList.remove('shaking');
+                
+                // Random xúc xắc (1-6)
+                const d1 = Math.floor(Math.random() * 6) + 1;
+                const d2 = Math.floor(Math.random() * 6) + 1;
+                const d3 = Math.floor(Math.random() * 6) + 1;
+                const total = d1 + d2 + d3;
+
+                // Cập nhật class CSS để hiển thị đúng mặt xúc xắc
+                document.getElementById('dice1').className = `dice d-${d1}`;
+                document.getElementById('dice2').className = `dice d-${d2}`;
+                document.getElementById('dice3').className = `dice d-${d3}`;
+
+                // Tính kết quả
+                let result = (total >= 11 && total <= 17) ? 'TAI' : 'XIU';
+                if (total === 3 || total === 18) result = 'NHÀ CÁI ĂN HẾT'; // Bộ ba đồng nhất (ví dụ)
+
+                let color = result === 'TAI' ? '#e74c3c' : '#3498db';
+                
+                // Hiển thị kết quả UI
+                resultText.innerHTML = `Kết quả: ${d1} - ${d2} - ${d3} (${total}) 
+                    <span class="badge" style="background:${color}">${result === 'TAI' ? 'TÀI' : 'XỈU'}</span>`;
+                
+                if(choice === result) {
+                    resultText.innerHTML += " <br>🎉 Bạn thắng!";
+                } else {
+                    resultText.innerHTML += " <br>💸 Bạn thua!";
+                }
+
+            }, 1000); // Lắc trong 1 giây
+        }
+    </script>
+</body>
+</html>
