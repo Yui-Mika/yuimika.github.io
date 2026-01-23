@@ -4,9 +4,9 @@ Welcome to my repository for the **UI/UX Design** course.
 This repository serves as a portfolio documenting my learning journey, homework assignments, and projects created throughout the semester.
 
 > **Student:** Duong Ngoc Linh Dan (Yui-Mika) <br>
-> **Subject:** User Interface Design
-> **Study at** Van Lang University
-> **Lecturer** Nguyen Thai Anh
+> **Subject:** User Interface Design <br>
+> **Study at** Van Lang University <br>
+> **Lecturer** Nguyen Thai Anh <br>
 
 ---
 
